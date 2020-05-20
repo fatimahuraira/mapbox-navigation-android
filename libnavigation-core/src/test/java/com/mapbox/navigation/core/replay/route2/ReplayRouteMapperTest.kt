@@ -4,6 +4,7 @@ import android.location.Location
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.navigation.core.replay.history.ReplayEventUpdateLocation
+import com.mapbox.navigation.core.replay.route.ReplayRouteMapper
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals

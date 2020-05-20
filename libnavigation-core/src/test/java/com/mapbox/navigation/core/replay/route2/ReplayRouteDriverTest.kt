@@ -1,6 +1,8 @@
 package com.mapbox.navigation.core.replay.route2
 
 import com.mapbox.geojson.LineString
+import com.mapbox.navigation.core.replay.route.ReplayRouteDriver
+import com.mapbox.navigation.core.replay.route.ReplayRouteOptions
 import com.mapbox.turf.TurfConstants
 import com.mapbox.turf.TurfMeasurement
 import org.junit.Assert.assertEquals

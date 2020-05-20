@@ -2,6 +2,7 @@ package com.mapbox.navigation.core.replay.route2
 
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
+import com.mapbox.navigation.core.replay.route.ReplayRouteSmoother
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

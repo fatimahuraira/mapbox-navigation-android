@@ -30,7 +30,7 @@ import com.mapbox.navigation.core.MapboxNavigation;
 import com.mapbox.navigation.core.directions.session.RoutesObserver;
 import com.mapbox.navigation.core.replay.MapboxReplayer;
 import com.mapbox.navigation.core.replay.ReplayLocationEngine;
-import com.mapbox.navigation.core.replay.route2.ReplayProgressObserver;
+import com.mapbox.navigation.core.replay.route.ReplayProgressObserver;
 import com.mapbox.navigation.core.trip.session.BannerInstructionsObserver;
 import com.mapbox.navigation.core.trip.session.OffRouteObserver;
 import com.mapbox.navigation.core.trip.session.TripSessionState;
