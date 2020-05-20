@@ -28,6 +28,9 @@ import com.mapbox.navigation.base.TimeFormat;
 import com.mapbox.navigation.core.internal.MapboxDistanceFormatter;
 import com.mapbox.navigation.core.MapboxNavigation;
 import com.mapbox.navigation.core.directions.session.RoutesObserver;
+import com.mapbox.navigation.core.replay.MapboxReplayer;
+import com.mapbox.navigation.core.replay.ReplayLocationEngine;
+import com.mapbox.navigation.core.replay.route2.ReplayProgressObserver;
 import com.mapbox.navigation.core.trip.session.BannerInstructionsObserver;
 import com.mapbox.navigation.core.trip.session.OffRouteObserver;
 import com.mapbox.navigation.core.trip.session.TripSessionState;
@@ -93,6 +96,7 @@ public class NavigationViewModel extends AndroidViewModel {
       new NavigationViewModelProgressObserver(this);
 
   private NavigationViewOptions navigationViewOptions;
+  private MapboxReplayer mapboxReplayer = new MapboxReplayer();
 
   public NavigationViewModel(Application application) {
     super(application);
@@ -381,16 +385,12 @@ public class NavigationViewModel extends AndroidViewModel {
   }
 
   private LocationEngine initializeLocationEngineFrom(final NavigationViewOptions options) {
-    final LocationEngine locationEngine = options.locationEngine();
-    final boolean shouldReplayRoute = options.shouldSimulateRoute();
-
-    final LocationEngine locationEngineToReturn = locationEngineConductor.obtainLocationEngine();
-    if (locationEngineToReturn instanceof ReplayRouteLocationEngine) {
-      final Point lastLocation = getOriginOfRoute(options.directionsRoute());
-      ((ReplayRouteLocationEngine) locationEngineToReturn).assignLastLocation(lastLocation);
-      ((ReplayRouteLocationEngine) locationEngineToReturn).assign(options.directionsRoute());
+    if (options.shouldSimulateRoute()) {
+      navigation.registerRouteProgressObserver(new ReplayProgressObserver(mapboxReplayer));
+      return new ReplayLocationEngine(mapboxReplayer);
+    } else {
+      return options.locationEngine();
     }
-    return locationEngineToReturn;
   }
 
   private void initializeNavigation(Context context, NavigationOptions options, LocationEngine locationEngine) {
