@@ -66,29 +66,37 @@ internal class MapRouteProgressChangeListener(
         } else {
             if (vanishRouteLineEnabled && hasGeometry && (job == null || !job!!.isActive)) {
                 job = ThreadController.getMainScopeAndRootJob().scope.launch {
-                    val totalDist =
-                        (routeProgress.distanceRemaining() + routeProgress.distanceTraveled())
-                    val percentDistanceTraveled = routeProgress.distanceTraveled() / totalDist
+                    val percentDistanceTraveled = getPercentDistanceTraveled(routeProgress)
                     if (percentDistanceTraveled > 0) {
-                        ValueAnimator.ofFloat(lastDistanceValue, percentDistanceTraveled).apply {
-                            duration = ROUTE_LINE_VANISH_ANIMATION_DURATION
-                            interpolator = LinearInterpolator()
-                            startDelay = ROUTE_LINE_VANISH_ANIMATION_DELAY
-                            addUpdateListener {
-                                val animationDistanceValue = it.animatedValue as Float
-                                if (animationDistanceValue > MINIMUM_ROUTE_LINE_OFFSET) {
-                                    val expression = routeLine.getExpressionAtOffset(animationDistanceValue)
-                                    routeLine.hideShieldLineAtOffset(animationDistanceValue)
-                                    routeLine.decorateRouteLine(expression)
-                                }
-                            }
-                            start()
-                        }
+                        animateVanishRouteLineUpdate(lastDistanceValue, percentDistanceTraveled)
                         lastDistanceValue = percentDistanceTraveled
                     }
                 }
             }
         }
         routeArrow.addUpcomingManeuverArrow(routeProgress)
+    }
+
+    private fun animateVanishRouteLineUpdate(startingDistanceValue: Float, percentDistanceTraveled: Float) {
+        ValueAnimator.ofFloat(startingDistanceValue, percentDistanceTraveled).apply {
+            duration = ROUTE_LINE_VANISH_ANIMATION_DURATION
+            interpolator = LinearInterpolator()
+            startDelay = ROUTE_LINE_VANISH_ANIMATION_DELAY
+            addUpdateListener {
+                val animationDistanceValue = it.animatedValue as Float
+                if (animationDistanceValue > MINIMUM_ROUTE_LINE_OFFSET) {
+                    val expression = routeLine.getExpressionAtOffset(animationDistanceValue)
+                    routeLine.hideShieldLineAtOffset(animationDistanceValue)
+                    routeLine.decorateRouteLine(expression)
+                }
+            }
+            start()
+        }
+    }
+
+    private fun getPercentDistanceTraveled(routeProgress: RouteProgress): Float {
+        val totalDist =
+            (routeProgress.distanceRemaining() + routeProgress.distanceTraveled())
+        return routeProgress.distanceTraveled() / totalDist
     }
 }
