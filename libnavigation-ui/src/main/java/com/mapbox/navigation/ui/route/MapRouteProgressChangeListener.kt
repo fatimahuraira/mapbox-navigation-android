@@ -96,7 +96,7 @@ internal class MapRouteProgressChangeListener(
 
     private fun getPercentDistanceTraveled(routeProgress: RouteProgress): Float {
         val totalDist =
-            (routeProgress.distanceRemaining() + routeProgress.distanceTraveled())
-        return routeProgress.distanceTraveled() / totalDist
+            (routeProgress.distanceRemaining + routeProgress.distanceTraveled)
+        return routeProgress.distanceTraveled / totalDist
     }
 }
