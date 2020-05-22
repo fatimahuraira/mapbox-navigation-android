@@ -10,7 +10,6 @@ enum class CameraUpdateMode {
      * [NavigationCamera] will ignore the update when tracking is already
      * enabled.
      *
-     *
      * If tracking is disabled, the update animation will execute.
      */
     DEFAULT,
